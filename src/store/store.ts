@@ -3,5 +3,11 @@ export class Store {
   private reducers: { [key: string]: Function };
   private state: { [key: string]: any };
 
-  constructor() {}
+  constructor(reducers = {}, initialState = {}) {
+    this.state = initialState;
+  }
+
+  get value() {
+    return this.state;
+  }
 }
