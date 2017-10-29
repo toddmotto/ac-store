@@ -19,11 +19,7 @@ button.addEventListener(
     if (!input.value.trim()) return;
 
     const payload = { label: input.value, complete: false };
-
-    store.dispatch({
-      type: 'ADD_TODO',
-      payload,
-    });
+    store.dispatch(new fromStore.AddTodo(payload));
 
     input.value = '';
   },
