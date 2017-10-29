@@ -4,16 +4,26 @@ export class Store {
   private state: { [key: string]: any };
 
   constructor(reducers = {}, initialState = {}) {
+    this.subscribers = [];
     this.reducers = reducers;
-    this.state = initialState;
+    this.state = this.reduce(initialState, {});
   }
 
   get value() {
     return this.state;
   }
 
+  subscribe(fn) {
+    this.subscribers = [...this.subscribers, fn];
+    this.notify();
+    return () => {
+      this.subscribers = this.subscribers.filter(sub => sub !== fn);
+    };
+  }
+
   dispatch(action) {
     this.state = this.reduce(this.state, action);
+    this.notify();
   }
 
   reduce(state, action) {
@@ -22,5 +32,9 @@ export class Store {
       newState[prop] = this.reducers[prop](state[prop], action);
     }
     return newState;
+  }
+
+  private notify() {
+    this.subscribers.map(fn => fn(this.state));
   }
 }

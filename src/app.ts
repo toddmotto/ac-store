@@ -25,8 +25,6 @@ button.addEventListener(
       payload,
     });
 
-    console.log(store.value);
-
     input.value = '';
   },
   false
@@ -38,3 +36,11 @@ todoList.addEventListener('click', function(event) {
     console.log(target);
   }
 });
+
+const unsubscribe = store.subscribe(({ todos: state }) =>
+  renderTodos(state.todos)
+);
+
+destroy.addEventListener('click', unsubscribe, false);
+
+store.subscribe(state => console.log('STATE:::', state));
